@@ -47,6 +47,12 @@ class StoryList {
     // TODO - Implement this functions!
     // this function should return the newly created story so it can be used in
     // the script.js file where it will be appended to the DOM
+
+    // make sure we are logged in 
+    // crate a navbar with submit, favorites, mystories
+    // create a story, the form comes up when click submit
+    // call generateStories
+    // call getStories
   }
 }
 
