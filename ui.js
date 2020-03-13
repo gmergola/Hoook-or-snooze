@@ -161,6 +161,8 @@ $(async function() {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
+      <i id= "star${story.storyId}" class="star fas fa-star hidden"></i>
+      <i id= "outline-star${story.storyId}" class="star far fa-star"></i>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
@@ -172,6 +174,27 @@ $(async function() {
 
     return storyMarkup;
   }
+
+  // changing star when clicked
+  $("body").on("click", ".star", function(event){
+    let starId = event.target.id
+    let parent = $(event.target).parent()
+    let parentId = parent[0].id
+    console.log(parentId);
+    if(starId.includes('outline-star')){
+      $(`#${starId}`).hide();
+      $(`#star${parentId}`).show();
+    }else{
+      $(`#${starId}`).hide();
+      $(`#outline-star${parentId}`).show();
+    }
+  })
+
+  // showing favorites
+  $(".navbar-favorites").on("click", function(){
+    $allStoriesList.toggle();
+    $("#favorited-articles").slideToggle(); 
+  })
 
   /* hide all elements in elementsArr */
 
@@ -190,14 +213,7 @@ $(async function() {
   function showNavForLoggedInUser() {
     $navLogin.hide();
     $navLogOut.show();
-
-    let logoutNavbar = $(`<ul>
-    <a class = "navbar-Submit">Submit </a>
-    <a class = "navbar-favorites">favorites </a>
-    <a class = "navbar-mystories">my stories </a>
-    </ul>`)
-
-    $("nav").append(logoutNavbar);
+    $("#logged-in").show();
     
   }
 
@@ -228,7 +244,6 @@ $(async function() {
   }
 
   $(".navbar-Submit").on("click", function(){
-    console.log("hello");
     $submitForm.slideToggle();
     
   })
