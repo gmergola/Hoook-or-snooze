@@ -9,6 +9,7 @@ $(async function() {
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
 
+
   // global storyList variable
   let storyList = null;
 
@@ -189,7 +190,18 @@ $(async function() {
   function showNavForLoggedInUser() {
     $navLogin.hide();
     $navLogOut.show();
+
+    let logoutNavbar = $(`<ul>
+    <a class = "navbar-Submit">Submit </a>
+    <a class = "navbar-favorites">favorites </a>
+    <a class = "navbar-mystories">my stories </a>
+    </ul>`)
+
+    $("nav").append(logoutNavbar);
+    
   }
+
+  
 
   /* simple function to pull the hostname from a URL */
 
@@ -214,4 +226,60 @@ $(async function() {
       localStorage.setItem("username", currentUser.username);
     }
   }
+
+  $(".navbar-Submit").on("click", function(){
+    console.log("hello");
+    $submitForm.slideToggle();
+    
+  })
+
+  $submitForm.on("submit",async function (evt) {
+    evt.preventDefault();
+
+    // grab the author name & title & url;
+
+    const author = $("#author").val();
+    const title = $("#title").val();
+    const url = $("#url").val();
+
+    let newStory = {title, author, url};
+    
+    storyList.stories.unshift(await storyList.addStory(currentUser, newStory))
+
+    await generateStories();
+
+  })
+
+
+
+  $loginForm.on("submit", async function(evt) {
+    evt.preventDefault(); // no page-refresh on submit
+
+    // grab the username and password
+    const username = $("#login-username").val();
+    const password = $("#login-password").val();
+
+    // call the login static method to build a user instance
+    const userInstance = await User.login(username, password);
+    // set the global user to the user instance
+    currentUser = userInstance;
+    syncCurrentUserToLocalStorage();
+    loginAndSubmitForm();
+  });
+
 });
+
+
+
+
+// starting from here we made all the functions///
+
+
+
+
+// $navLogin.on("click", function() {
+//   // Show the Login and Create Account Forms
+//   $loginForm.slideToggle();
+//   $createAccountForm.slideToggle();
+//   $allStoriesList.toggle();
+// });

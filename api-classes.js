@@ -48,11 +48,13 @@ class StoryList {
     // this function should return the newly created story so it can be used in
     // the script.js file where it will be appended to the DOM
 
-    // make sure we are logged in 
-    // crate a navbar with submit, favorites, mystories
-    // create a story, the form comes up when click submit
-    // call generateStories
-    // call getStories
+    const response = await axios.post(`${BASE_URL}/stories`, 
+    {
+      token: user.loginToken,
+      story: newStory 
+    });
+
+    return new StoryList(response.data);
   }
 }
 
@@ -85,13 +87,8 @@ class User {
    */
 
   static async create(username, password, name) {
-    const response = await axios.post(`${BASE_URL}/signup`, {
-      user: {
-        username,
-        password,
-        name
-      }
-    });
+    
+    
 
     // build a new User instance from the API response
     const newUser = new User(response.data.user);
